@@ -61,7 +61,7 @@ namespace MyRecipeBook.Exceptions {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O e-mail não pode ser vazio..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O e-mail não pode estar vazio..
         /// </summary>
         public static string EMAIL_EMPTY {
             get {
@@ -70,7 +70,7 @@ namespace MyRecipeBook.Exceptions {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O endereço de e-mail é inválido..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O e-mail é inválido..
         /// </summary>
         public static string EMAIL_INVALID {
             get {
@@ -79,7 +79,7 @@ namespace MyRecipeBook.Exceptions {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O nome não pode ser vazio..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O nome não estar vazio..
         /// </summary>
         public static string NAME_EMPTY {
             get {
@@ -88,7 +88,7 @@ namespace MyRecipeBook.Exceptions {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a A senha deve ser maior do que 6 caracteres..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A senha deve ter mais de  6 caracteres..
         /// </summary>
         public static string PASSWORD_EMPTY {
             get {
