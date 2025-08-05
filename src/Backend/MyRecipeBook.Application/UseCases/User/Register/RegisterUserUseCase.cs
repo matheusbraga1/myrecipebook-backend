@@ -1,28 +1,40 @@
 ﻿using AutoMapper;
+using MyRecipeBook.Application.Services.Cryptography;
 using MyRecipeBook.Application.Services.Mappings;
 using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Communication.Responses;
+using MyRecipeBook.Domain.Repositories.User;
 using MyRecipeBook.Exceptions.ExceptionBase;
 
 namespace MyRecipeBook.Application.UseCases.User.Register;
 
 public class RegisterUserUseCase
 {
-    public ResponseRegisteredUserJson Execute(RequestRegisterUserJson request)
+    private readonly IUserWriteOnlyRepository _userWriteOnlyRepository;
+    private readonly IUserReadOnlyRepository _userReadOnlyRepository;
+
+    public RegisterUserUseCase(IUserReadOnlyRepository userReadOnlyRepository, IUserWriteOnlyRepository userWriteOnlyRepository)
     {
-        Validate(request);
+        _userReadOnlyRepository = userReadOnlyRepository;
+        _userWriteOnlyRepository = userWriteOnlyRepository;
+    }
+
+    public async Task<ResponseRegisteredUserJson> Execute(RequestRegisterUserJson request)
+    {
+        var passwordEncrypter = new PasswordEncrypter();
 
         var autoMapper = new MapperConfiguration(cfg =>
         {
-            cfg.AddProfile<AutoMapping>();
+            cfg.AddProfile(new AutoMapping());
         }).CreateMapper();
 
-        var user = new Domain.Entities.User
-        {
-            Email = request.Email,
-            Name = request.Name,
-            Password = request.Password
-        };
+        Validate(request);
+
+        var user = autoMapper.Map<Domain.Entities.User>(request);
+
+        user.Password = passwordEncrypter.EncryptPassword(request.Password);
+
+        await _userWriteOnlyRepository.Add(user);
 
         return new ResponseRegisteredUserJson
         {
