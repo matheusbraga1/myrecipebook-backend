@@ -1,0 +1,31 @@
+﻿using Dapper;
+using Microsoft.Data.SqlClient;
+
+namespace MyRecipeBook.Infrastructure.Migrations;
+
+public static class DatabaseMigration
+{
+    public static void MigrateDatabase(string connectionString)
+    {
+        EnsureDatabaseCreated(connectionString);
+    }
+
+    public static void EnsureDatabaseCreated(string connectionString)
+    {
+        var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
+
+        var dataBaseName = connectionStringBuilder.InitialCatalog;
+
+        connectionStringBuilder.Remove("Database");
+
+        using var dbConnection = new SqlConnection(connectionStringBuilder.ConnectionString);
+
+        var parameters = new DynamicParameters();
+        parameters.Add("name", dataBaseName);
+
+        var records = dbConnection.Query("SELECT * FROM sys.databases WHERE name = @name", parameters);
+
+        if (!records.Any())
+            dbConnection.Execute($"CREATE DATABASE {dataBaseName}");
+    }
+}
