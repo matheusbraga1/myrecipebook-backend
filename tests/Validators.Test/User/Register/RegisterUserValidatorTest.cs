@@ -48,4 +48,38 @@ public class RegisterUserValidatorTest
 
         result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessageException.EMAIL_EMPTY);
     }
+
+    [Fact]
+    public void Error_Email_Invalid()
+    {
+        var validator = new RegisterUserValidator();
+
+        var request = RequestRegisterUserJsonBuilder.Build();
+        request.Email = "matheus.com";
+
+        var result = validator.Validate(request);
+
+        result.IsValid.ShouldBeFalse();
+
+        result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessageException.EMAIL_INVALID);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    public void Error_Password_Invalid(int passwordLength)
+    {
+        var validator = new RegisterUserValidator();
+
+        var request = RequestRegisterUserJsonBuilder.Build(passwordLength);
+
+        var result = validator.Validate(request);
+
+        result.IsValid.ShouldBeFalse();
+
+        result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessageException.PASSWORD_INVALID);
+    }
 }
