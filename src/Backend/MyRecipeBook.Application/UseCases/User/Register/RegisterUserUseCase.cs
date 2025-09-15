@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MyRecipeBook.Application.Services.Cryptography;
-using MyRecipeBook.Application.Services.Mappings;
 using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Domain.Repositories;
@@ -46,7 +45,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         return new ResponseRegisteredUserJson
         {
-            Name = request.Name
+            Name = user.Name
         };
     }
 
