@@ -17,18 +17,16 @@ public class ExceptionFilter : IExceptionFilter
             ThrowUnknowException(context);        
     }
 
-    private void HandleMyRecipeBookException(ExceptionContext context)
+    private static void HandleMyRecipeBookException(ExceptionContext context)
     {
-        if (context.Exception is ErrorOnValidationException)
+        if (context.Exception is ErrorOnValidationException exception)
         {
-            var exception = context.Exception as ErrorOnValidationException;
-
-            context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
             context.Result = new BadRequestObjectResult(new ResponseErrorJson(exception.ErrorMessages));
+            context.ExceptionHandled = true;
         }
     }
 
-    private void ThrowUnknowException(ExceptionContext context)
+    private static void ThrowUnknowException(ExceptionContext context)
     {
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         context.Result = new ObjectResult(new ResponseErrorJson(ResourceMessageException.UNKNOW_ERROR));

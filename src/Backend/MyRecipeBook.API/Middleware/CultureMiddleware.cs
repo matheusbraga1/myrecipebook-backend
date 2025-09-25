@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using MyRecipeBook.Domain.Extensions;
+using System.Globalization;
 
 namespace MyRecipeBook.API.Middleware;
 
@@ -19,7 +20,7 @@ public class CultureMiddleware
 
         var cultureInfo = new CultureInfo("pt");
 
-        if (!string.IsNullOrWhiteSpace(requestedCulture) && supportedLanguages.Any(c => c.Name.Equals(requestedCulture)))
+        if (requestedCulture.NotEmpty() && supportedLanguages.Any(c => c.Name.Equals(requestedCulture)))
         {
             cultureInfo = new CultureInfo(requestedCulture);
         }

@@ -53,7 +53,7 @@ public class RegisterUserUseCaseTest
             .ShouldBe(ResourceMessageException.NAME_EMPTY);
     }
 
-    private RegisterUserUseCase CreateUseCase(string? email = null)
+    private static RegisterUserUseCase CreateUseCase(string? email = null)
     {
         var mapper = MapperBuilder.Build();
         var passwordEncrypter = PasswordEncrypterBuilder.Build();
