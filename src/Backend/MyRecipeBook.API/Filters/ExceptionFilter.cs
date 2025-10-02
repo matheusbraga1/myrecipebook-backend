@@ -19,9 +19,15 @@ public class ExceptionFilter : IExceptionFilter
 
     private static void HandleMyRecipeBookException(ExceptionContext context)
     {
-        if (context.Exception is ErrorOnValidationException exception)
+        if (context.Exception is InvalidLoginException invalidLoginException)
         {
-            context.Result = new BadRequestObjectResult(new ResponseErrorJson(exception.ErrorMessages));
+            context.HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            context.Result = new UnauthorizedObjectResult(new ResponseErrorJson(invalidLoginException.Message));
+            context.ExceptionHandled = true;
+        }
+        else if (context.Exception is ErrorOnValidationException errorOnValidationException)
+        {
+            context.Result = new BadRequestObjectResult(new ResponseErrorJson(errorOnValidationException.ErrorMessages));
             context.ExceptionHandled = true;
         }
     }
