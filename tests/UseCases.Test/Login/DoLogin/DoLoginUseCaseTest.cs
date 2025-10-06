@@ -1,8 +1,9 @@
 ﻿using CommonTestUtilities.Cryptography;
+using CommonTestUtilities.Entities;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using MyRecipeBook.Application.UseCases.Login.DoLogin;
-using MyRecipeBook.Domain.Entities;
+using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Exceptions;
 using MyRecipeBook.Exceptions.ExceptionBase;
 using Shouldly;
@@ -11,14 +12,26 @@ namespace UseCases.Test.Login.DoLogin;
 
 public class DoLoginUseCaseTest
 {
-    private async Task Success()
+    [Fact]
+    public async Task Success()
     {
-        var useCase = CreateUseCase();
-        var result = await useCase.Execute(RequestLoginJsonBuilder.Build());
+        (var user, var password) = UserBuilder.Build();
+
+        var useCase = CreateUseCase(user);
+
+        var result = await useCase.Execute(new RequestLoginJson
+        {
+            Email = user.Email,
+            Password = password
+        });
+
+        result.ShouldNotBeNull();
+        result.Name.ShouldNotBeNullOrWhiteSpace();
+        result.Name.ShouldBe(user.Name);
     }
 
     [Fact]
-    private async Task Error_Invalid_User()
+    public async Task Error_Invalid_User()
     {
         var request = RequestLoginJsonBuilder.Build();
 
