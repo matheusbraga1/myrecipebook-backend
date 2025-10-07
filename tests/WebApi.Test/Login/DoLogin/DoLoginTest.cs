@@ -1,23 +1,24 @@
-﻿using MyRecipeBook.Communication.Requests;
+﻿using CommonTestUtilities.Requests;
+using MyRecipeBook.Communication.Requests;
+using MyRecipeBook.Exceptions;
 using Shouldly;
-using System.Net.Http.Json;
+using System.Globalization;
 using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
+using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Login.DoLogin;
 
-public class DoLoginTest : IClassFixture<CustomWebApplicationFactory>
+public class DoLoginTest : MyRecipeBookClassFixture
 {
     private readonly string _method = "login";
-    private readonly HttpClient _httpClient;
     private readonly string _email;
     private readonly string _password;
     private readonly string _name;
 
-    public DoLoginTest(CustomWebApplicationFactory factory)
+    public DoLoginTest(CustomWebApplicationFactory factory) : base(factory)
     {
-        _httpClient = factory.CreateClient();
-
         _email = factory.GetEmail();
         _password = factory.GetPassword();
         _name = factory.GetName();
@@ -32,7 +33,7 @@ public class DoLoginTest : IClassFixture<CustomWebApplicationFactory>
             Password = _password
         };
 
-        var response = await _httpClient.PostAsJsonAsync(_method, request);
+        var response = await DoPost(_method, request);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -44,5 +45,27 @@ public class DoLoginTest : IClassFixture<CustomWebApplicationFactory>
 
         name.ShouldNotBeNullOrWhiteSpace();
         name.ShouldBe(_name);
+    }
+
+    [Theory]
+    [ClassData(typeof(CultureInlineDataTest))]
+    public async Task Error_Login_Invalid(string culture)
+    {
+        var request = RequestLoginJsonBuilder.Build();
+
+        var response = await DoPost(_method, request, culture);
+
+        response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+
+        await using var responseBody = await response.Content.ReadAsStreamAsync();
+
+        var responseData = await JsonDocument.ParseAsync(responseBody);
+
+        var errors = responseData.RootElement.GetProperty("errors").EnumerateArray();
+
+        var expectedMessage = ResourceMessageException.ResourceManager.GetString("EMAIL_OR_PASSWORD_INVALID", new CultureInfo(culture));
+
+        errors.ShouldHaveSingleItem();
+        errors.ShouldContain(error => error.GetString()!.Equals(expectedMessage));
     }
 }

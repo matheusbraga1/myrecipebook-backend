@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="ResourceMessageException-en-US.Designer.cs">
+    <Compile Update="ResourceMessageException.en-US.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>ResourceMessageException-en-US.resx</DependentUpon>
+      <DependentUpon>ResourceMessageException.en-US.resx</DependentUpon>
     </Compile>
     <Compile Update="ResourceMessageException.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -20,9 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="ResourceMessageException-en-US.resx">
+    <EmbeddedResource Update="ResourceMessageException.en-US.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResourceMessageException-en-US.Designer.cs</LastGenOutput>
+      <LastGenOutput>ResourceMessageException.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="ResourceMessageException.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
