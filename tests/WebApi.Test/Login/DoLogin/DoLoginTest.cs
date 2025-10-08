@@ -42,9 +42,11 @@ public class DoLoginTest : MyRecipeBookClassFixture
         var responseData = await JsonDocument.ParseAsync(responseBody);
 
         var name = responseData.RootElement.GetProperty("name").GetString();
+        var token = responseData.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString();
 
         name.ShouldNotBeNullOrWhiteSpace();
         name.ShouldBe(_name);
+        token.ShouldNotBeNullOrEmpty();
     }
 
     [Theory]
