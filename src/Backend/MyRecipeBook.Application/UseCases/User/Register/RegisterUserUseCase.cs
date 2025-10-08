@@ -4,6 +4,7 @@ using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Domain.Repositories;
 using MyRecipeBook.Domain.Repositories.User;
+using MyRecipeBook.Domain.Security.Tokens;
 using MyRecipeBook.Exceptions;
 using MyRecipeBook.Exceptions.ExceptionBase;
 
@@ -16,19 +17,22 @@ public class RegisterUserUseCase : IRegisterUserUseCase
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly PasswordEncrypter _passwordEncrypter;
+    private readonly IAccessTokenGenerator _accessTokenGenerator;
 
     public RegisterUserUseCase(
         IUserReadOnlyRepository userReadOnlyRepository, 
         IUserWriteOnlyRepository userWriteOnlyRepository,
         IUnitOfWork unitOfWork,
         IMapper mapper, 
-        PasswordEncrypter passwordEncrypter)
+        PasswordEncrypter passwordEncrypter,
+        IAccessTokenGenerator accessTokenGenerator)
     {
         _userReadOnlyRepository = userReadOnlyRepository;
         _userWriteOnlyRepository = userWriteOnlyRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _passwordEncrypter = passwordEncrypter;
+        _accessTokenGenerator = accessTokenGenerator;
     }
 
     public async Task<ResponseRegisteredUserJson> Execute(RequestRegisterUserJson request)
@@ -36,8 +40,8 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         await Validate(request);
 
         var user = _mapper.Map<Domain.Entities.User>(request);
-
         user.Password = _passwordEncrypter.EncryptPassword(request.Password);
+        user.UserIdentifier = Guid.NewGuid();
 
         await _userWriteOnlyRepository.Add(user);
 
@@ -45,7 +49,11 @@ public class RegisterUserUseCase : IRegisterUserUseCase
 
         return new ResponseRegisteredUserJson
         {
-            Name = user.Name
+            Name = user.Name,
+            Tokens = new ResponseTokensJson
+            {
+                AccessToken = _accessTokenGenerator.Generate(user.UserIdentifier)
+            }
         };
     }
 

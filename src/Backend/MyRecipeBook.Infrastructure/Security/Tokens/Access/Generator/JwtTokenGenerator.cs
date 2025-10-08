@@ -2,6 +2,7 @@
 using MyRecipeBook.Domain.Security.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Security.Claims;
 
 namespace MyRecipeBook.Infrastructure.Security.Tokens.Access.Generator;
 
@@ -18,8 +19,14 @@ public class JwtTokenGenerator : IAccessTokenGenerator
 
     public string Generate(Guid userIdentifier)
     {
+        var claims = new List<Claim>()
+        {
+            new Claim(ClaimTypes.Sid, userIdentifier.ToString())
+        };
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(_expirationTimeMinutes),
             SigningCredentials = new SigningCredentials(SecurityKey(), SecurityAlgorithms.HmacSha256)
         };
