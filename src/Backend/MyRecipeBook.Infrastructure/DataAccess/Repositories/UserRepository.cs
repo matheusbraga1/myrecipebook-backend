@@ -14,6 +14,11 @@ public class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepository
 
     public async Task<bool> ExistActiveUserWithEmail(string email) => await _dbContext.Users.AnyAsync(u => u.Email.Equals(email) && u.Active);
 
+    public async Task<bool> ExistsActiveUserWithIdentifier(Guid userIdentifier)
+    {
+        return await _dbContext.Users.AnyAsync(user => user.UserIdentifier.Equals(userIdentifier) && user.Active);
+    }
+
     public async Task<User?> GetByEmailAndPassword(string email, string password)
     {
         return await _dbContext.Users
