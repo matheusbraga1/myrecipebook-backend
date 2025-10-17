@@ -10,7 +10,7 @@ namespace WebApi.Test.User.Register;
 
 public class RegisterUserTest : MyRecipeBookClassFixture
 {
-    private readonly string method = "user";
+    private const string method = "user";
 
     public RegisterUserTest(CustomWebApplicationFactory factory) : base(factory) { }
 

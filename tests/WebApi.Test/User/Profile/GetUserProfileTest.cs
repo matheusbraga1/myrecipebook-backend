@@ -7,7 +7,7 @@ namespace WebApi.Test.User.Profile;
 
 public class GetUserProfileTest : MyRecipeBookClassFixture
 {
-    private readonly string METHOD = "user";
+    private const string METHOD = "user";
 
     private readonly string _name;
     private readonly string _email;
