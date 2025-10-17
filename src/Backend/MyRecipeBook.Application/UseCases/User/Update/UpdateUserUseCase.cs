@@ -30,7 +30,7 @@ public class UpdateUserUseCase : IUpdateUserUseCase
     {
         var loggedUser = await _loggedUser.User();
 
-        await Validate(request, request.Email);
+        await Validate(request, loggedUser.Email);
 
         var user = await _repository.GetById(loggedUser.Id);
 
