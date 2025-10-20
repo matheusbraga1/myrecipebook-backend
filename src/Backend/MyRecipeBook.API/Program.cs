@@ -55,6 +55,19 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 builder.Services.AddHttpContextAccessor();
 
+const string CorsPolicy = "CorsPolicy";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CorsPolicy, policy =>
+    {
+        policy.SetIsOriginAllowed(origin => 
+            origin.StartsWith("http://localhost", StringComparison.OrdinalIgnoreCase) ||
+            origin.StartsWith("http://127.0.0.1", StringComparison.OrdinalIgnoreCase))
+          .AllowAnyHeader()
+          .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -68,6 +81,8 @@ app.UseMiddleware<CultureMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(CorsPolicy);
 
 app.MapControllers();
 
