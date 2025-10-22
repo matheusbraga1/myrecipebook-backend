@@ -3,7 +3,8 @@ using MyRecipeBook.API.Filters;
 
 namespace MyRecipeBook.API.Attributes;
 
-public class AuthenticatedUserAttribute : TypeFilterAttribute
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+sealed class AuthenticatedUserAttribute : TypeFilterAttribute
 {
     public AuthenticatedUserAttribute() : base(typeof(AuthenticatedUserFilter))
     {
