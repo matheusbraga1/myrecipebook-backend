@@ -135,6 +135,15 @@
   <data name="NO_TOKEN" xml:space="preserve">
     <value>No tokens found.</value>
   </data>
+  <data name="PASSWORD_CURRENT_EQUALS_NEW_PASSWORD" xml:space="preserve">
+    <value>The new password must be different from the current password.</value>
+  </data>
+  <data name="PASSWORD_DIFFERENT_CURRENT_PASSWORD" xml:space="preserve">
+    <value>The password you entered does not match your current password.</value>
+  </data>
+  <data name="PASSWORD_EMPTY" xml:space="preserve">
+    <value>The password must be not empty.</value>
+  </data>
   <data name="PASSWORD_INVALID" xml:space="preserve">
     <value>The password must be longer than 6 characters.</value>
   </data>

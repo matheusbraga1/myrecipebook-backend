@@ -135,6 +135,15 @@
   <data name="NO_TOKEN" xml:space="preserve">
     <value>Nenhum token encontrado.</value>
   </data>
+  <data name="PASSWORD_CURRENT_EQUALS_NEW_PASSWORD" xml:space="preserve">
+    <value>A nova senha deve ser diferente da senha atual.</value>
+  </data>
+  <data name="PASSWORD_DIFFERENT_CURRENT_PASSWORD" xml:space="preserve">
+    <value>A senha que você digitou não coincide com a senha atual.</value>
+  </data>
+  <data name="PASSWORD_EMPTY" xml:space="preserve">
+    <value>A senha não pode estar vazia.</value>
+  </data>
   <data name="PASSWORD_INVALID" xml:space="preserve">
     <value>A senha deve ter mais de  6 caracteres.</value>
   </data>

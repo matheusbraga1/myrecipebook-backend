@@ -115,6 +115,33 @@ namespace MyRecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A nova senha deve ser diferente da senha atual..
+        /// </summary>
+        public static string PASSWORD_CURRENT_EQUALS_NEW_PASSWORD {
+            get {
+                return ResourceManager.GetString("PASSWORD_CURRENT_EQUALS_NEW_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A senha que você digitou não coincide com a senha atual..
+        /// </summary>
+        public static string PASSWORD_DIFFERENT_CURRENT_PASSWORD {
+            get {
+                return ResourceManager.GetString("PASSWORD_DIFFERENT_CURRENT_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a A senha não pode estar vazia..
+        /// </summary>
+        public static string PASSWORD_EMPTY {
+            get {
+                return ResourceManager.GetString("PASSWORD_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a A senha deve ter mais de  6 caracteres..
         /// </summary>
         public static string PASSWORD_INVALID {
