@@ -1,7 +1,7 @@
-﻿using MyRecipeBook.Application.Services.Cryptography;
-using MyRecipeBook.Communication.Requests;
+﻿using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Domain.Repositories.User;
+using MyRecipeBook.Domain.Security.Cryptography;
 using MyRecipeBook.Domain.Security.Tokens;
 using MyRecipeBook.Exceptions.ExceptionBase;
 
@@ -10,10 +10,10 @@ namespace MyRecipeBook.Application.UseCases.Login.DoLogin;
 public class DoLoginUseCase : IDoLoginUseCase
 {
     private readonly IUserReadOnlyRepository _repository;
-    private readonly PasswordEncrypter _passwordEncrypter;
+    private readonly IPasswordEncrypter _passwordEncrypter;
     private readonly IAccessTokenGenerator _accessTokenGenerator;
 
-    public DoLoginUseCase(IUserReadOnlyRepository repository, PasswordEncrypter passwordEncrypter, IAccessTokenGenerator accessTokenGenerator)
+    public DoLoginUseCase(IUserReadOnlyRepository repository, IPasswordEncrypter passwordEncrypter, IAccessTokenGenerator accessTokenGenerator)
     {
         _repository = repository;
         _passwordEncrypter = passwordEncrypter;
@@ -22,7 +22,7 @@ public class DoLoginUseCase : IDoLoginUseCase
 
     public async Task<ResponseRegisteredUserJson> Execute(RequestLoginJson request)
     {
-        var encriptedPassword = _passwordEncrypter.EncryptPassword(request.Password);
+        var encriptedPassword = _passwordEncrypter.Encrypt(request.Password);
 
         var user = await _repository.GetByEmailAndPassword(request.Email, encriptedPassword) ?? throw new InvalidLoginException();
 
