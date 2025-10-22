@@ -7,7 +7,7 @@ using MyRecipeBook.Exceptions;
 using MyRecipeBook.Exceptions.ExceptionBase;
 using Shouldly;
 
-namespace UseCases.Test.Update;
+namespace UseCases.Test.User.Update;
 
 public class UpdateUserUseCaseTest
 {
