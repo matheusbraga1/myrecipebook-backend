@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using MyRecipeBook.Application.Services.Cryptography;
 using MyRecipeBook.Communication.Requests;
 using MyRecipeBook.Communication.Responses;
 using MyRecipeBook.Domain.Repositories;
 using MyRecipeBook.Domain.Repositories.User;
+using MyRecipeBook.Domain.Security.Cryptography;
 using MyRecipeBook.Domain.Security.Tokens;
 using MyRecipeBook.Exceptions;
 using MyRecipeBook.Exceptions.ExceptionBase;
@@ -16,15 +16,15 @@ public class RegisterUserUseCase : IRegisterUserUseCase
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
-    private readonly PasswordEncrypter _passwordEncrypter;
+    private readonly IPasswordEncrypter _passwordEncrypter;
     private readonly IAccessTokenGenerator _accessTokenGenerator;
 
     public RegisterUserUseCase(
         IUserReadOnlyRepository userReadOnlyRepository, 
         IUserWriteOnlyRepository userWriteOnlyRepository,
         IUnitOfWork unitOfWork,
-        IMapper mapper, 
-        PasswordEncrypter passwordEncrypter,
+        IMapper mapper,
+        IPasswordEncrypter passwordEncrypter,
         IAccessTokenGenerator accessTokenGenerator)
     {
         _userReadOnlyRepository = userReadOnlyRepository;
@@ -40,7 +40,7 @@ public class RegisterUserUseCase : IRegisterUserUseCase
         await Validate(request);
 
         var user = _mapper.Map<Domain.Entities.User>(request);
-        user.Password = _passwordEncrypter.EncryptPassword(request.Password);
+        user.Password = _passwordEncrypter.Encrypt(request.Password);
         user.UserIdentifier = Guid.NewGuid();
 
         await _userWriteOnlyRepository.Add(user);
