@@ -217,4 +217,18 @@ public class RecipeValidatorTest
 
         result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessageException.INSTRUCTION_TEXT_EMPTY);
     }
+
+    [Fact]
+    public void Error_Instructions_Too_Long()
+    {
+        var request = RequestRecipeJsonBuilder.Build();
+        request.Instructions.First().Text = RequestStringGenerator.Paragraph(2001);
+
+        var validator = new RecipeValidator();
+
+        var result = validator.Validate(request);
+
+        result.IsValid.ShouldBeFalse();
+        result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessageException.INSTRUCTION_EXCEEDS_LIMIT_CHARACTERS);
+    }
 }
